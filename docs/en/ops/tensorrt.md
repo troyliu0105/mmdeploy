@@ -45,6 +45,12 @@
     - [Inputs](#inputs-6)
     - [Outputs](#outputs-6)
     - [Type Constraints](#type-constraints-6)
+  - [TRTBatchedRotatedNMS](#trtbatchedrotatednms)
+    - [Description](#description-7)
+    - [Parameters](#parameters-7)
+    - [Inputs](#inputs-7)
+    - [Outputs](#outputs-7)
+    - [Type Constraints](#type-constraints-7)
 
 <!-- TOC -->
 
@@ -77,6 +83,7 @@ Batched NMS with a fixed number of output bounding boxes.
 </dl>
 
 #### Outputs
+
 <dl>
 <dt><tt>outputs[0]</tt>: T</dt>
 <dd>dets; 3-D tensor of shape (N, valid_num_boxes, 5), `valid_num_boxes` is the number of boxes after NMS. For each row `dets[i,j,:] = [x0, y0, x1, y1, score]`</dd>
@@ -157,7 +164,6 @@ y = scale * (x - mean) / sqrt(variance + epsilon) + B, where mean and variance a
 #### Type Constraints
 
 - T:tensor(float32, Linear)
-
 
 ### MMCVModulatedDeformConv2d
 
@@ -278,7 +284,7 @@ Perform RoIAlign on output feature, used in bbox_head of most two-stage detector
 
 #### Description
 
-ScatterND takes three inputs `data` tensor of rank r >= 1, `indices` tensor of rank q >= 1, and `updates` tensor of rank q + r - indices.shape[-1] - 1. The output of the operation is produced by creating a copy of the input `data`, and then updating its value to values specified by updates at specific index positions specified by `indices`. Its output shape is the same as the shape of `data`. Note that `indices` should not have duplicate entries. That is, two or more updates for the same index-location is not supported.
+ScatterND takes three inputs `data` tensor of rank r >= 1, `indices` tensor of rank q >= 1, and `updates` tensor of rank q + r - indices.shape\[-1\] - 1. The output of the operation is produced by creating a copy of the input `data`, and then updating its value to values specified by updates at specific index positions specified by `indices`. Its output shape is the same as the shape of `data`. Note that `indices` should not have duplicate entries. That is, two or more updates for the same index-location is not supported.
 
 The `output` is calculated via the following equation:
 
@@ -316,3 +322,44 @@ None
 #### Type Constraints
 
 - T:tensor(float32, Linear), tensor(int32, Linear)
+
+### TRTBatchedRotatedNMS
+
+#### Description
+
+Batched rotated NMS with a fixed number of output bounding boxes.
+
+#### Parameters
+
+| Type    | Parameter             | Description                                                                                                                             |
+| ------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `int`   | `background_label_id` | The label ID for the background class. If there is no background class, set it to `-1`.                                                 |
+| `int`   | `num_classes`         | The number of classes.                                                                                                                  |
+| `int`   | `topK`                | The number of bounding boxes to be fed into the NMS step.                                                                               |
+| `int`   | `keepTopK`            | The number of total bounding boxes to be kept per-image after the NMS step. Should be less than or equal to the `topK` value.           |
+| `float` | `scoreThreshold`      | The scalar threshold for score (low scoring boxes are removed).                                                                         |
+| `float` | `iouThreshold`        | The scalar threshold for IoU (new boxes that have high IoU overlap with previously selected boxes are removed).                         |
+| `int`   | `isNormalized`        | Set to `false` if the box coordinates are not normalized, meaning they are not in the range `[0,1]`. Defaults to `true`.                |
+| `int`   | `clipBoxes`           | Forcibly restrict bounding boxes to the normalized range `[0,1]`. Only applicable if `isNormalized` is also `true`. Defaults to `true`. |
+
+#### Inputs
+
+<dl>
+<dt><tt>inputs[0]</tt>: T</dt>
+<dd>boxes; 4-D tensor of shape (N, num_boxes, num_classes, 5), where N is the batch size; `num_boxes` is the number of boxes; `num_classes` is the number of classes, which could be 1 if the boxes are shared between all classes.</dd>
+<dt><tt>inputs[1]</tt>: T</dt>
+<dd>scores; 4-D tensor of shape (N, num_boxes, 1, num_classes). </dd>
+</dl>
+
+#### Outputs
+
+<dl>
+<dt><tt>outputs[0]</tt>: T</dt>
+<dd>dets; 3-D tensor of shape (N, valid_num_boxes, 6), `valid_num_boxes` is the number of boxes after NMS. For each row `dets[i,j,:] = [x0, y0, width, height, theta, score]`</dd>
+<dt><tt>outputs[1]</tt>: tensor(int32, Linear)</dt>
+<dd>labels; 2-D tensor of shape (N, valid_num_boxes). </dd>
+</dl>
+
+#### Type Constraints
+
+- T:tensor(float32, Linear)
