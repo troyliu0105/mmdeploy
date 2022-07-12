@@ -556,6 +556,27 @@ GPU: ncnn, TensorRT, PPLNN
     <td align="center">89.85</td>
     <td align="center">90.41</td>
   </tr>
+  <tr>
+    <td align="center" rowspan="2"><a href="https://github.com/open-mmlab/mmclassification/blob/master/configs/vision_transformer/vit-base-p16_ft-64xb64_in1k-384.py">Vision Transformer</a></td>
+    <td align="center">top-1</td>
+    <td align="center">85.43</td>
+    <td align="center">85.43</td>
+    <td align="center">-</td>
+    <td align="center">85.43</td>
+    <td align="center">85.42</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+  </tr>
+  <tr>
+    <td align="center">top-5</td>
+    <td align="center">97.77</td>
+    <td align="center">97.77</td>
+    <td align="center">-</td>
+    <td align="center">97.77</td>
+    <td align="center">97.76</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -748,6 +769,29 @@ GPU: ncnn, TensorRT, PPLNN
     <td align="center">-</td>
     <td align="center">33.7</td>
     <td align="center">33.7</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+  </tr>
+  <tr>
+    <td align="center" rowspan="2"><a href="https://github.com/open-mmlab/mmdetection/blob/master/configs/swin/mask_rcnn_swin-t-p4-w7_fpn_1x_coco.py">Swin-Transformer</a></td>
+    <td align="center" rowspan="2">Instance Segmentation</td>
+    <td align="center" rowspan="2">COCO2017</td>
+    <td align="center">box AP</td>
+    <td align="center">42.7</td>
+    <td align="center">-</td>
+    <td align="center">42.7</td>
+    <td align="center">42.5</td>
+    <td align="center">37.7</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+  </tr>
+  <tr>
+    <td align="center">mask AP</td>
+    <td align="center">39.3</td>
+    <td align="center">-</td>
+    <td align="center">39.3</td>
+    <td align="center">39.3</td>
+    <td align="center">35.4</td>
     <td align="center">-</td>
     <td align="center">-</td>
   </tr>
